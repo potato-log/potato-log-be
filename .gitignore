@@ -2,9 +2,11 @@
 ### Example user template
 
 # IntelliJ project files
+**/src/main/resources/**
 .idea
 *.iml
 out
 gen
 build
 .gradle
+.DS_Store
