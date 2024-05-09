@@ -17,7 +17,7 @@ import java.util.List;
 @Table(name = "comments")
 public class Comment extends BaseEntityWithIsDeleted {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
