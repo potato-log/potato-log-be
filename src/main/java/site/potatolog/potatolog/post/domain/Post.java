@@ -1,11 +1,11 @@
-package site.potatolog.potatolog.post.entity;
+package site.potatolog.potatolog.post.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import site.potatolog.potatolog.common.entity.BaseEntityWithIsDeleted;
-import site.potatolog.potatolog.user.entity.User;
+import site.potatolog.potatolog.common.domain.BaseEntityWithIsDeleted;
+import site.potatolog.potatolog.user.domain.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,19 +20,19 @@ public class Post extends BaseEntityWithIsDeleted {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String title;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
-    @Column(name = "view_count")
+    @Column(name = "view_count", nullable = false)
     private int viewCount;
 
-    @Column(name = "is_temp")
+    @Column(name = "is_temp", nullable = false)
     private boolean isTemp;
 
-    @Column(name = "like_count")
+    @Column(name = "like_count", nullable = false)
     private int likeCount;
 
     @ManyToOne(fetch = FetchType.LAZY)

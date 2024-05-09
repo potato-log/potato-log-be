@@ -1,16 +1,17 @@
-package site.potatolog.potatolog.follow.entity;
+package site.potatolog.potatolog.like.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import site.potatolog.potatolog.user.entity.User;
+import site.potatolog.potatolog.post.domain.Post;
+import site.potatolog.potatolog.user.domain.User;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "follows")
-public class Follow {
+@Table(name = "likes")
+public class Like {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,6 +22,6 @@ public class Follow {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "follow_user_id")
-    private User followUser;
+    @JoinColumn(name = "post_id")
+    private Post post;
 }
