@@ -1,4 +1,4 @@
-package site.potatolog.potatolog.common.entity;
+package site.potatolog.potatolog.common.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

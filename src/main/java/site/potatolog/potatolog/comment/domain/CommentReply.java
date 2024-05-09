@@ -1,12 +1,12 @@
-package site.potatolog.potatolog.comment.entity;
+package site.potatolog.potatolog.comment.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import site.potatolog.potatolog.common.entity.BaseEntityWithIsDeleted;
-import site.potatolog.potatolog.post.entity.Post;
-import site.potatolog.potatolog.user.entity.User;
+import site.potatolog.potatolog.common.domain.BaseEntityWithIsDeleted;
+import site.potatolog.potatolog.post.domain.Post;
+import site.potatolog.potatolog.user.domain.User;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -18,7 +18,7 @@ public class CommentReply extends BaseEntityWithIsDeleted {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 150)
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)

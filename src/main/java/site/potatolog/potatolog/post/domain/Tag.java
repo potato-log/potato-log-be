@@ -1,4 +1,4 @@
-package site.potatolog.potatolog.post.entity;
+package site.potatolog.potatolog.post.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -15,6 +15,6 @@ public class Tag {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 10)
     private String content;
 }
