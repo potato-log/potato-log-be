@@ -13,7 +13,7 @@ import site.potatolog.potatolog.common.entity.BaseEntityWithIsDeleted;
 public class User extends BaseEntityWithIsDeleted {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
      private Long id;
 
     @Column(nullable = false)

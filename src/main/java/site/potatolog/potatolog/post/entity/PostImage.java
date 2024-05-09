@@ -13,7 +13,7 @@ import site.potatolog.potatolog.common.entity.BaseEntity;
 public class PostImage extends BaseEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "image_url")
