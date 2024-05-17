@@ -1,47 +1,56 @@
-package site.potatolog.potatolog.user.service;
+package site.potatolog.potatolog.user.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
+import org.springframework.http.*;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import site.potatolog.potatolog.user.domain.User;
+import site.potatolog.potatolog.user.dto.UserRequest;
+import site.potatolog.potatolog.user.dto.UserResponse;
+import site.potatolog.potatolog.user.service.UserService;
 
-@Service
-public class AuthService {
+import java.util.Collections;
+import java.util.List;
 
-    //발급받은 클라이언트ID
+@RestController
+public class UserController {
+    @Autowired
+    private final UserService userService;
+
     @Value("${spring.github.clientId}")
     private String clientId;
+
     //secret 코드
     @Value("${spring.github.clientSecret}")
     private String clientSecret;
 
-    //콜백 uri
-    @Value("${spring.github.redirectUri}")
-    private String redirectUri;
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
-    public void gitLogin(String code){
-        String accessToken = getGithubAccessToken(code);
-        System.out.println("accessToken : " + accessToken);
+    @GetMapping("/login/oauth2/code/github")
+    public ResponseEntity<?> getUserInfo(@RequestParam(value = "code") String code) {
         try {
+            String accessToken = getGithubAccessToken(code);
             JsonNode userResourceNode = getUserResource(accessToken);
             ObjectMapper objectMapper = new ObjectMapper();
-            String formattedJson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(userResourceNode);
-            System.out.println("유저 리소스 값 : " + formattedJson);
-        } catch (JsonProcessingException e){
-            e.printStackTrace();
+            UserRequest userRequest = objectMapper.convertValue(userResourceNode, UserRequest.class);
+            User user = userRequest.toEntity();
+
+            List<UserResponse> userResponses = Collections.singletonList(new UserResponse(user));
+            return ResponseEntity.ok(userResponses);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 
-    public String getGithubAccessToken(String code){
-        //여기로 code 보내서 accessToken 발급 받아야됨
+    public String getGithubAccessToken(String code) {
+        //accessToken을 받기 위한 코드
         String accessTokenUrl = "https://github.com/login/oauth/access_token";
 
         //헤더설정
@@ -53,16 +62,17 @@ public class AuthService {
         param.add("client_id", clientId);
         param.add("client_secret", clientSecret);
         param.add("code", code);
-        param.add("redirect_uri", redirectUri);
 
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<JsonNode> response = restTemplate.postForEntity(accessTokenUrl, new HttpEntity<>(param, headers), JsonNode.class);
+
         JsonNode accessTokenNode = response.getBody();
+        System.out.println(accessTokenNode);
         return accessTokenNode.get("access_token").asText();
     }
 
     public JsonNode getUserResource(String accessToken){
-        //이 주소로 accesstoken값으로 get 요청을 보내서 유저 정보를 받아옴
+        //accesstoken값으로 get 요청을 보내서 유저 정보를 받아옴
         String resourceUri = "https://api.github.com/user";
 
         RestTemplate restTemplate = new RestTemplate();

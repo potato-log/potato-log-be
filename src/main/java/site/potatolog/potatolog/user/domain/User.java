@@ -2,6 +2,7 @@ package site.potatolog.potatolog.user.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.potatolog.potatolog.common.domain.BaseEntityWithIsDeleted;
@@ -14,7 +15,7 @@ public class User extends BaseEntityWithIsDeleted {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-     private Long id;
+    private Long id;
 
     @Column(nullable = false, length = 20)
     private String nickname;
@@ -39,5 +40,13 @@ public class User extends BaseEntityWithIsDeleted {
 
     @Column(name = "following_count", nullable = false)
     private int followingCount;
+
+    @Builder
+    public User(String nickname, String email, String socialAccountUid, String profileImageUrl) {
+        this.nickname = nickname;
+        this.email = email;
+        this.socialAccountUid = socialAccountUid;
+        this.profileImageUrl = profileImageUrl;
+    }
 
 }
