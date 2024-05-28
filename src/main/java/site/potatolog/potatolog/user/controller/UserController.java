@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import site.potatolog.potatolog.user.domain.User;
 import site.potatolog.potatolog.user.dto.UserRequest;
@@ -25,7 +27,6 @@ public class UserController {
     @Value("${spring.github.clientId}")
     private String clientId;
 
-    //secret 코드
     @Value("${spring.github.clientSecret}")
     private String clientSecret;
 
@@ -42,7 +43,9 @@ public class UserController {
             UserRequest userRequest = objectMapper.convertValue(userResourceNode, UserRequest.class);
             User user = userRequest.toEntity();
 
-            List<UserResponse> userResponses = Collections.singletonList(new UserResponse(user));
+            User savedUser = userService.saveUser(user);
+
+            List<UserResponse> userResponses = Collections.singletonList(new UserResponse(savedUser));
             return ResponseEntity.ok(userResponses);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
@@ -50,15 +53,12 @@ public class UserController {
     }
 
     public String getGithubAccessToken(String code) {
-        //accessToken을 받기 위한 코드
         String accessTokenUrl = "https://github.com/login/oauth/access_token";
 
-        //헤더설정
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
         headers.add("Accept", "application/json");
 
-        //요청 파라미터 설정
-        MultiValueMap<String, String>param = new LinkedMultiValueMap<>();
+        MultiValueMap<String, String> param = new LinkedMultiValueMap<>();
         param.add("client_id", clientId);
         param.add("client_secret", clientSecret);
         param.add("code", code);
@@ -67,12 +67,10 @@ public class UserController {
         ResponseEntity<JsonNode> response = restTemplate.postForEntity(accessTokenUrl, new HttpEntity<>(param, headers), JsonNode.class);
 
         JsonNode accessTokenNode = response.getBody();
-        System.out.println(accessTokenNode);
         return accessTokenNode.get("access_token").asText();
     }
 
-    public JsonNode getUserResource(String accessToken){
-        //accesstoken값으로 get 요청을 보내서 유저 정보를 받아옴
+    public JsonNode getUserResource(String accessToken) {
         String resourceUri = "https://api.github.com/user";
 
         RestTemplate restTemplate = new RestTemplate();
@@ -81,5 +79,4 @@ public class UserController {
         HttpEntity entity = new HttpEntity(headers);
         return restTemplate.exchange(resourceUri, HttpMethod.GET, entity, JsonNode.class).getBody();
     }
-
 }

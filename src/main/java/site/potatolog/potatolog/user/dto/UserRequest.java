@@ -8,6 +8,7 @@ import site.potatolog.potatolog.user.domain.User;
 @JsonIgnoreProperties(ignoreUnknown = true) // 알려지지 않은 필드 무시
 public class UserRequest {
 
+    private Integer id;
     private String name;
     private String html_url;
     private String node_id;
@@ -15,6 +16,7 @@ public class UserRequest {
 
     public User toEntity() {
         return User.builder()
+                .githubId(id)
                 .nickname(name)
                 .email(html_url)
                 .socialAccountUid(node_id)

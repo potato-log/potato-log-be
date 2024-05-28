@@ -17,6 +17,9 @@ public class User extends BaseEntityWithIsDeleted {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "github_id")
+    private Integer githubId;
+
     @Column(nullable = false, length = 20)
     private String nickname;
 
@@ -42,11 +45,13 @@ public class User extends BaseEntityWithIsDeleted {
     private int followingCount;
 
     @Builder
-    public User(String nickname, String email, String socialAccountUid, String profileImageUrl) {
+    public User(Integer githubId, String nickname, String email, String socialAccountUid, String profileImageUrl, String blogName) {
+        this.githubId = githubId;
         this.nickname = nickname;
         this.email = email;
         this.socialAccountUid = socialAccountUid;
         this.profileImageUrl = profileImageUrl;
+        this.blogName = blogName != null ? blogName : "DefaultBlogName";
     }
 
 }
