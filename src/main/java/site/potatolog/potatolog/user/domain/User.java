@@ -1,16 +1,14 @@
 package site.potatolog.potatolog.user.domain;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import site.potatolog.potatolog.common.domain.BaseEntityWithIsDeleted;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "users")
+@ToString
 public class User extends BaseEntityWithIsDeleted {
 
     @Id

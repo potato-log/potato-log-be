@@ -1,13 +1,13 @@
 package site.potatolog.potatolog.user.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import site.potatolog.potatolog.user.domain.User;
 
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
+@ToString
 public class UserResponse {
     private String nickname;
 
