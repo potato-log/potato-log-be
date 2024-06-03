@@ -11,7 +11,7 @@ import site.potatolog.potatolog.user.domain.User;
 public class UserResponse {
     private String nickname;
 
-    private String email;
+    private String address;
 
     private String socialAccountUid;
 
@@ -21,7 +21,7 @@ public class UserResponse {
 
     public UserResponse(User user) {
         this.nickname = user.getNickname();
-        this.email = user.getEmail();
+        this.address = user.getAddress();
         this.socialAccountUid = user.getSocialAccountUid();
         this.profileImageUrl = user.getProfileImageUrl();
         this.blogName = user.getBlogName();

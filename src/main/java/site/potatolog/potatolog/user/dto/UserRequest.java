@@ -18,7 +18,7 @@ public class UserRequest {
         return User.builder()
                 .githubId(id)
                 .nickname(name)
-                .email(html_url)
+                .address(html_url)
                 .socialAccountUid(node_id)
                 .profileImageUrl(avatar_url)
                 .build();
