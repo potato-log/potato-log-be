@@ -11,21 +11,22 @@ import lombok.NoArgsConstructor;
 @Entity
 public class PostTag {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id")
-    private Post post;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "post_id")
+  private Post post;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tag_id")
-    private Tag tag;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "tag_id")
+  private Tag tag;
 
-    @Builder
-    public PostTag(Post post, Tag tag) {
-        this.post = post;
-        this.tag = tag;
-    }
+  @Builder
+  public PostTag(Post post, Tag tag) {
+    this.post = post;
+    this.tag = tag;
+  }
+
 }

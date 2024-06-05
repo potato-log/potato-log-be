@@ -8,35 +8,47 @@ import site.potatolog.potatolog.post.domain.PostImage;
 import site.potatolog.potatolog.post.domain.Tag;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+
 public class PostRequest {
 
-    private String title;
-    private String tagContent;
-    private String imageUrl;
-    private String postContent;
-    private boolean isTemp;
+  private String title;
+  private List<String> tagContent;
+  private String imageUrl;
+  private String postContent;
+  private boolean isTemp;
 
-    public Post toEntity() {
-        Tag tag = Tag.builder()
-                .content(this.tagContent)
-                .build();
+  public List<String> getTagContents() {
+    return tagContent != null ? tagContent : Collections.emptyList();
+  }
 
-        PostImage postImage = PostImage.builder()
-                .imageUrl(this.imageUrl)
-                .build();
+  public Post toEntity(List<Tag> tags) {
+    List<PostImage> postImages = new ArrayList<>();
 
-        List<PostImage> postImages = new ArrayList<>();
-        postImages.add(postImage);
-
-        return Post.builder()
-                .title(this.title)
-                .content(this.postContent)
-                .postImages(postImages)
-                .isTemp(this.isTemp)
-                .build();
+    if (this.imageUrl != null) {
+      PostImage postImage = PostImage.builder()
+              .imageUrl(this.imageUrl)
+              .build();
+      postImages.add(postImage);
     }
+
+    String finalContent = this.isTemp ? this.postContent : this.postContent + "<img src=\"" + this.imageUrl + "\" />";
+
+    Post post = Post.builder()
+            .title(this.title)
+            .content(this.postContent)
+            .postImages(postImages)
+            .isTemp(this.isTemp)
+            .build();
+
+    for (Tag tag : tags) {
+      post.addTag(tag);
+    }
+
+    return post;
+  }
 }

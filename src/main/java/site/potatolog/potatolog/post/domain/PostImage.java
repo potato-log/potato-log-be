@@ -1,10 +1,7 @@
 package site.potatolog.potatolog.post.domain;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import site.potatolog.potatolog.common.domain.BaseEntity;
 
 @Getter
@@ -20,14 +17,15 @@ public class PostImage extends BaseEntity {
     @Column(name = "image_url")
     private String imageUrl;
 
+    @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Post post;
 
     @Builder
-    public PostImage(Long id, String imageUrl, Post post) {
-        this.id = id;
+    public PostImage(String imageUrl, Post post) {
         this.imageUrl = imageUrl;
         this.post = post;
     }
+
 }
