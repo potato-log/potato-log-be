@@ -4,12 +4,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
-@EnableJpaAuditing
 @SpringBootApplication
+@EnableJpaAuditing
 public class PotatologApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(PotatologApplication.class, args);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(PotatologApplication.class, args);
+  }
 
 }

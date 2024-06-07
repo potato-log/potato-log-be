@@ -16,39 +16,37 @@ import java.util.List;
 
 public class PostRequest {
 
-  private String title;
-  private List<String> tagContent;
-  private String imageUrl;
-  private String postContent;
-  private boolean isTemp;
+    private String title;
+    private List<String> tagContent;
+    private String imageUrl;
+    private String postContent;
+    private boolean isTemp;
 
-  public List<String> getTagContents() {
-    return tagContent != null ? tagContent : Collections.emptyList();
-  }
-
-  public Post toEntity(List<Tag> tags) {
-    List<PostImage> postImages = new ArrayList<>();
-
-    if (this.imageUrl != null) {
-      PostImage postImage = PostImage.builder()
-              .imageUrl(this.imageUrl)
-              .build();
-      postImages.add(postImage);
+    public List<String> getTagContents() {
+        return tagContent != null ? tagContent : Collections.emptyList();
     }
 
-    String finalContent = this.isTemp ? this.postContent : this.postContent + "<img src=\"" + this.imageUrl + "\" />";
+    public Post toEntity(List<Tag> tags) {
+        List<PostImage> postImages = new ArrayList<>();
 
-    Post post = Post.builder()
-            .title(this.title)
-            .content(this.postContent)
-            .postImages(postImages)
-            .isTemp(this.isTemp)
-            .build();
+        if (this.imageUrl != null) {
+            PostImage postImage = PostImage.builder()
+                    .imageUrl(this.imageUrl)
+                    .build();
+            postImages.add(postImage);
+        }
 
-    for (Tag tag : tags) {
-      post.addTag(tag);
+        Post post = Post.builder()
+                .title(this.title)
+                .content(this.postContent)
+                .postImages(postImages)
+                .isTemp(this.isTemp)
+                .build();
+
+        for (Tag tag : tags) {
+            post.addTag(tag);
+        }
+
+        return post;
     }
-
-    return post;
-  }
 }
