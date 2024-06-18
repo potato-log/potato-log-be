@@ -11,5 +11,4 @@ public class PotatologApplication {
     public static void main(String[] args) {
         SpringApplication.run(PotatologApplication.class, args);
     }
-
 }

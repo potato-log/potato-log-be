@@ -2,6 +2,7 @@ package site.potatolog.potatolog.post.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.potatolog.potatolog.common.domain.BaseEntityWithIsDeleted;
@@ -42,4 +43,39 @@ public class Post extends BaseEntityWithIsDeleted {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PostImage> postImages = new ArrayList<>();
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PostTag> postTags = new ArrayList<>();
+
+    @Builder
+    public Post(String title, String content, List<PostImage> postImages, boolean isTemp) {
+        this.title = title;
+        this.content = content;
+        if (postImages != null) {
+            this.postImages = postImages;
+        }
+        this.isTemp = isTemp;
+    }
+
+    @Builder
+    public Post(String title, String content, int viewCount, boolean isTemp, int likeCount, User user, List<PostImage> postImages) {
+        this.title = title;
+        this.content = content;
+        this.viewCount = viewCount;
+        this.isTemp = isTemp;
+        this.likeCount = likeCount;
+        this.user = user;
+        this.postImages = postImages;
+        this.postTags = new ArrayList<>();
+    }
+
+    public void addTag(Tag tag) {
+        PostTag postTag = new PostTag(this, tag);
+        postTags.add(postTag);
+        tag.getPostTags().add(postTag);
+    }
+
+    public void addPostImage(PostImage postImage) {
+        postImages.add(postImage);
+        postImage.setPost(this);
+    }
 }
